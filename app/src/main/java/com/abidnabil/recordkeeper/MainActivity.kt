@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.reset_cycling -> {
+
             Toast.makeText(this, "Clicked Reset Cycling Button", Toast.LENGTH_LONG).show()
             true
         }
@@ -49,32 +50,30 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     }
 
 
-}
-
-private fun onCyclingClicked(): Boolean {
-    supportFragmentManager.commit {
-        replace(R.id.frame_content, CyclingFragment())
-    }
-    return true
-}
-
-private fun onRunningClicked(): Boolean {
-    supportFragmentManager.commit {
-        replace(R.id.frame_content, RunningFragment())
-    }
-    return true
-}
-
-override fun onNavigationItemSelected(p0: MenuItem) = when (p0.itemId) {
-    R.id.nav_cycling -> {
-        onCyclingClicked()
+    private fun onCyclingClicked(): Boolean {
+        supportFragmentManager.commit {
+            replace(R.id.frame_content, CyclingFragment())
+        }
+        return true
     }
 
-    R.id.nav_running -> {
-        onRunningClicked()
+    private fun onRunningClicked(): Boolean {
+        supportFragmentManager.commit {
+            replace(R.id.frame_content, RunningFragment())
+        }
+        return true
     }
 
-    else -> false
-}
+    override fun onNavigationItemSelected(p0: MenuItem) = when (p0.itemId) {
+        R.id.nav_cycling -> {
+            onCyclingClicked()
+        }
+
+        R.id.nav_running -> {
+            onRunningClicked()
+        }
+
+        else -> false
+    }
 
 }
