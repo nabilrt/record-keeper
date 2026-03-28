@@ -1,7 +1,9 @@
 package com.abidnabil.recordkeeper
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.abidnabil.recordkeeper.databinding.ActivityMainBinding
@@ -19,27 +21,60 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
     }
 
-    private fun onCyclingClicked() {
-        supportFragmentManager.commit {
-            replace(R.id.frame_content, CyclingFragment())
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.toolbar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.reset_cycling -> {
+            Toast.makeText(this, "Clicked Reset Cycling Button", Toast.LENGTH_LONG).show()
+            true
+        }
+
+        R.id.reset_running -> {
+            Toast.makeText(this, "Clicked Reset Running Button", Toast.LENGTH_LONG).show()
+            true
+        }
+
+        R.id.reset_all -> {
+            Toast.makeText(this, "Clicked Reset All Button", Toast.LENGTH_LONG).show()
+            true
+        }
+
+        else -> {
+            super.onOptionsItemSelected(item)
         }
     }
 
-    private fun onRunningClicked() {
-        supportFragmentManager.commit {
-            replace(R.id.frame_content, RunningFragment())
-        }
+
+}
+
+private fun onCyclingClicked(): Boolean {
+    supportFragmentManager.commit {
+        replace(R.id.frame_content, CyclingFragment())
+    }
+    return true
+}
+
+private fun onRunningClicked(): Boolean {
+    supportFragmentManager.commit {
+        replace(R.id.frame_content, RunningFragment())
+    }
+    return true
+}
+
+override fun onNavigationItemSelected(p0: MenuItem) = when (p0.itemId) {
+    R.id.nav_cycling -> {
+        onCyclingClicked()
     }
 
-    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        if (p0.itemId == R.id.nav_cycling) {
-            onCyclingClicked()
-            return true
-        } else if (p0.itemId == R.id.nav_running) {
-            onRunningClicked()
-            return true
-        } else {
-            return false
-        }
+    R.id.nav_running -> {
+        onRunningClicked()
     }
+
+    else -> false
+}
+
 }

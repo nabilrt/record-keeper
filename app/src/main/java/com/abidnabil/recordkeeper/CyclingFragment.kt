@@ -17,7 +17,6 @@ class CyclingFragment : Fragment() {
     ): View {
 
         binding = FragmentCyclingBinding.inflate(inflater, container, false)
-
         return binding.root
 
     }
