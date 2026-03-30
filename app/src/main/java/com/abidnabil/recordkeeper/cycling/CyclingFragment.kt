@@ -1,4 +1,4 @@
-package com.abidnabil.recordkeeper
+package com.abidnabil.recordkeeper.cycling
 
 import android.content.Intent
 import android.os.Bundle
