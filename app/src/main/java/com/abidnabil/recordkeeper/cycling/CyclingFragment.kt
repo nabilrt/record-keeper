@@ -1,11 +1,13 @@
 package com.abidnabil.recordkeeper.cycling
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.abidnabil.recordkeeper.EditRecordActivity
 import com.abidnabil.recordkeeper.databinding.FragmentCyclingBinding
 
 class CyclingFragment : Fragment() {
@@ -18,6 +20,29 @@ class CyclingFragment : Fragment() {
 
         binding = FragmentCyclingBinding.inflate(inflater, container, false)
         return binding.root
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        displayRecords()
+    }
+
+    private fun displayRecords() {
+        val runningPreferences =
+            requireContext().getSharedPreferences("cycling_records", Context.MODE_PRIVATE)
+        binding.textViewLongestRideValue.text =
+            runningPreferences.getString("Longest Ride record", null)
+        binding.textViewLongestRideDate.text =
+            runningPreferences.getString("Longest Ride date", null)
+        binding.textViewBiggestClimbValue.text =
+            runningPreferences.getString("Biggest Climb record", null)
+        binding.textViewBiggestClimbDate.text =
+            runningPreferences.getString("Biggest Climb date", null)
+        binding.textViewBestAverageSpeedValue.text =
+            runningPreferences.getString("Best Average Speed record", null)
+        binding.textViewBestAverageSpeedDate.text =
+            runningPreferences.getString("Best Average Speed date", null)
 
     }
 
@@ -40,8 +65,9 @@ class CyclingFragment : Fragment() {
     }
 
     private fun launchCyclingRecordScreen(record: String) {
-        val intent = Intent(context, EditCyclingRecordActivity::class.java)
-        intent.putExtra("Record", record)
+        val intent = Intent(context, EditRecordActivity::class.java)
+        intent.putExtra("title", record)
+        intent.putExtra("recordType", "cycling")
         startActivity(intent)
 
     }
