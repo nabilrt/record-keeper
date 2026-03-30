@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.abidnabil.recordkeeper.EditRecordActivity
-import com.abidnabil.recordkeeper.running.EditRunningRecordActivity
 import com.abidnabil.recordkeeper.databinding.FragmentRunningBinding
 
 class RunningFragment : Fragment() {

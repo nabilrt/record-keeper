@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.abidnabil.recordkeeper.databinding.ActivityEditRecordBinding
-import com.abidnabil.recordkeeper.databinding.ActivityEditRunningRecordBinding
 import java.io.Serializable
 
 class EditRecordActivity : AppCompatActivity() {
