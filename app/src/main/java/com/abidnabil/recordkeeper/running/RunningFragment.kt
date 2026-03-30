@@ -43,15 +43,15 @@ class RunningFragment : Fragment() {
     private fun displayRecords() {
         val runningPreferences =
             requireContext().getSharedPreferences("running_records", Context.MODE_PRIVATE)
-        binding.textView5kmValue.text = runningPreferences.getString("5km time", null)
+        binding.textView5kmValue.text = runningPreferences.getString("5km record", null)
         binding.textView5kmDate.text = runningPreferences.getString("5km date", null)
-        binding.textView10kmValue.text = runningPreferences.getString("10km time", null)
+        binding.textView10kmValue.text = runningPreferences.getString("10km record", null)
         binding.textView10kmDate.text = runningPreferences.getString("10km date", null)
         binding.textViewHalfMarathonValue.text =
-            runningPreferences.getString("Half-marathon time", null)
+            runningPreferences.getString("Half-marathon record", null)
         binding.textViewHalfMarathonDate.text =
             runningPreferences.getString("Half-marathon date", null)
-        binding.textViewMarathonValue.text = runningPreferences.getString("Marathon time", null)
+        binding.textViewMarathonValue.text = runningPreferences.getString("Marathon record", null)
         binding.textViewMarathonDate.text = runningPreferences.getString("Marathon date", null)
     }
 
@@ -76,8 +76,8 @@ class RunningFragment : Fragment() {
 
     private fun launchRunningRecordScreen(title: String) {
         val intent = Intent(context, EditRecordActivity::class.java)
-        intent.putExtra("title", title)
-        intent.putExtra("recordType", "running")
+        val screenData = EditRecordActivity.ScreenData(title, "running_records", "Time")
+        intent.putExtra("screen_data", screenData)
         startActivity(intent)
     }
 

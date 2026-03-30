@@ -53,21 +53,20 @@ class CyclingFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.containerLongestRide.setOnClickListener {
-            launchCyclingRecordScreen("Longest Ride")
+            launchCyclingRecordScreen("Longest Ride","Distance")
 
         }
         binding.containerBiggestClimb.setOnClickListener {
-            launchCyclingRecordScreen("Biggest Climb")
+            launchCyclingRecordScreen("Biggest Climb","Height")
         }
         binding.containerBestAverageSpeed.setOnClickListener {
-            launchCyclingRecordScreen("Best Average Speed")
+            launchCyclingRecordScreen("Best Average Speed","Average Speed")
         }
     }
 
-    private fun launchCyclingRecordScreen(record: String) {
+    private fun launchCyclingRecordScreen(record: String, recordFieldHint:String) {
         val intent = Intent(context, EditRecordActivity::class.java)
-        intent.putExtra("title", record)
-        intent.putExtra("recordType", "cycling")
+        intent.putExtra("screen_data", EditRecordActivity.ScreenData(record,"cycling_records",recordFieldHint))
         startActivity(intent)
 
     }

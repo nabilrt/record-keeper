@@ -1,37 +1,39 @@
 package com.abidnabil.recordkeeper
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.abidnabil.recordkeeper.databinding.ActivityEditRecordBinding
 import com.abidnabil.recordkeeper.databinding.ActivityEditRunningRecordBinding
+import java.io.Serializable
 
 class EditRecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditRecordBinding
-    private val recordTitle by lazy {
-        intent.getStringExtra("title")
+    private val screenData by lazy {
+       // intent.getSerializableExtra("screen_data") as ScreenData
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("screen_data", ScreenData::class.java) as ScreenData
+        } else {
+            intent.getSerializableExtra("screen_data") as ScreenData
+        }
     }
 
-    private val recordType by lazy {
-        intent.getStringExtra("recordType")
-    }
-    private val runningRecords by lazy {
-        getSharedPreferences("running_records", Context.MODE_PRIVATE)
+    private val recordPreferences by lazy {
+        getSharedPreferences(screenData.sharedPreferenceName, Context.MODE_PRIVATE)
     }
 
-    private val cyclingRecords by lazy {
-        getSharedPreferences("cycling_records", Context.MODE_PRIVATE)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditRecordBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getInitialData(recordTitle, recordType)
+        getInitialData()
 
-        title = if (recordType == "cycling") "$recordTitle details" else "$recordTitle Record"
-
+        title = "${screenData.record} Details"
+        binding.editTextRecord.hint = screenData.recordFieldHint
 
         binding.buttonSave.setOnClickListener {
             saveRecord()
@@ -46,51 +48,40 @@ class EditRecordActivity : AppCompatActivity() {
     }
 
     private fun clearRecord() {
-        if (recordType == "cycling") {
-            cyclingRecords.edit {
-                remove("$recordTitle record")
-                remove("$recordTitle date")
-            }
-        } else {
-            runningRecords.edit {
-                remove("$recordTitle time")
-                remove("$recordTitle date")
-            }
+
+        recordPreferences.edit {
+            remove("${screenData.record} record")
+            remove("${screenData.record} date")
         }
+
 
     }
 
-    private fun getInitialData(recordTitle: String?, recordType: String?) {
-        if (recordType == "cycling") {
-            binding.editTextRecord.setText(
-                cyclingRecords.getString("$recordTitle record", "").toString()
-            )
-            binding.editTextDate.setText(
-                cyclingRecords.getString("$recordTitle date", "").toString()
-            )
-        } else {
-            binding.editTextRecord.setText(
-                runningRecords.getString("$recordTitle time", "").toString()
-            )
-            binding.editTextDate.setText(
-                runningRecords.getString("$recordTitle date", "").toString()
-            )
-        }
+    private fun getInitialData() {
+
+        binding.editTextRecord.setText(
+            recordPreferences.getString("${screenData.record} record", "").toString()
+        )
+        binding.editTextDate.setText(
+            recordPreferences.getString("${screenData.record} date", "").toString()
+        )
+
 
     }
 
     private fun saveRecord() {
-        if (recordType == "cycling") {
-            cyclingRecords.edit {
-                putString("$recordTitle record", binding.editTextRecord.text.toString())
-                putString("$recordTitle date", binding.editTextDate.text.toString())
-            }
-        } else {
-            runningRecords.edit {
-                putString("$recordTitle time", binding.editTextRecord.text.toString())
-                putString("$recordTitle date", binding.editTextDate.text.toString())
-            }
+
+        recordPreferences.edit {
+            putString("${screenData.record} record", binding.editTextRecord.text.toString())
+            putString("${screenData.record} date", binding.editTextDate.text.toString())
         }
 
+
     }
+
+    data class ScreenData(
+        val record: String,
+        val sharedPreferenceName: String,
+        val recordFieldHint: String
+    ) : Serializable
 }

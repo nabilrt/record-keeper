@@ -1,15 +1,19 @@
 package com.abidnabil.recordkeeper
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.fragment.app.commit
 import com.abidnabil.recordkeeper.cycling.CyclingFragment
 import com.abidnabil.recordkeeper.databinding.ActivityMainBinding
 import com.abidnabil.recordkeeper.running.RunningFragment
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
@@ -29,26 +33,74 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.reset_cycling -> {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val menuOptionCaptured = when (item.itemId) {
+            R.id.reset_cycling -> {
+                showConfirmationDiaLog("cycling", false)
+                true
 
-            Toast.makeText(this, "Clicked Reset Cycling Button", Toast.LENGTH_LONG).show()
-            true
+            }
+            R.id.reset_running -> {
+                showConfirmationDiaLog("running", false)
+                true
+            }
+            R.id.reset_all -> {
+                showConfirmationDiaLog("", true)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+
         }
 
-        R.id.reset_running -> {
-            Toast.makeText(this, "Clicked Reset Running Button", Toast.LENGTH_LONG).show()
-            true
+        return menuOptionCaptured
+
+    }
+
+    private fun showConfirmationDiaLog(selection: String, isAll: Boolean) {
+        AlertDialog.Builder(this).setTitle("Warning")
+            .setMessage("You are about to delete all $selection records. Are you sure?")
+            .setPositiveButton(
+                "Yes"
+            ) { _, _ ->
+                if (isAll) {
+                    getSharedPreferences("cycling_records", Context.MODE_PRIVATE).edit {
+                        clear()
+
+                    }
+                    getSharedPreferences("running_records", Context.MODE_PRIVATE).edit {
+                        clear()
+                    }
+                } else {
+                    getSharedPreferences(selection + "_records", MODE_PRIVATE).edit {
+                        clear()
+                    }
+
+                }
+                showConfirmation()
+
+            }.setNegativeButton("No", { dialogue, _ ->
+                dialogue.dismiss()
+            }).show()
+
+
+    }
+
+    private fun showConfirmation() {
+        when (binding.bottomNav.selectedItemId) {
+            R.id.nav_running -> onRunningClicked()
+            R.id.nav_cycling -> onCyclingClicked()
+            else -> {}
         }
 
-        R.id.reset_all -> {
-            Toast.makeText(this, "Clicked Reset All Button", Toast.LENGTH_LONG).show()
-            true
-        }
-
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
+        val snackbar = Snackbar.make(
+            binding.frameContent,
+            "Records Cleared Successfully",
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.anchorView = binding.bottomNav
+        snackbar.show()
     }
 
 
