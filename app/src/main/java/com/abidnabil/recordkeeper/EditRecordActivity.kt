@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.abidnabil.recordkeeper.databinding.ActivityEditRecordBinding
@@ -12,7 +14,7 @@ import java.io.Serializable
 class EditRecordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditRecordBinding
     private val screenData by lazy {
-       // intent.getSerializableExtra("screen_data") as ScreenData
+        // intent.getSerializableExtra("screen_data") as ScreenData
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("screen_data", ScreenData::class.java) as ScreenData
         } else {
@@ -22,6 +24,17 @@ class EditRecordActivity : AppCompatActivity() {
 
     private val recordPreferences by lazy {
         getSharedPreferences(screenData.sharedPreferenceName, Context.MODE_PRIVATE)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                return true
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

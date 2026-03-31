@@ -28,6 +28,8 @@ class CyclingFragment : Fragment() {
         displayRecords()
     }
 
+
+
     private fun displayRecords() {
         val runningPreferences =
             requireContext().getSharedPreferences(FILENAME, Context.MODE_PRIVATE)
