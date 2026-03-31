@@ -30,7 +30,7 @@ class CyclingFragment : Fragment() {
 
     private fun displayRecords() {
         val runningPreferences =
-            requireContext().getSharedPreferences("cycling_records", Context.MODE_PRIVATE)
+            requireContext().getSharedPreferences(FILENAME, Context.MODE_PRIVATE)
         binding.textViewLongestRideValue.text =
             runningPreferences.getString("Longest Ride record", null)
         binding.textViewLongestRideDate.text =
@@ -53,21 +53,28 @@ class CyclingFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.containerLongestRide.setOnClickListener {
-            launchCyclingRecordScreen("Longest Ride","Distance")
+            launchCyclingRecordScreen("Longest Ride", "Distance")
 
         }
         binding.containerBiggestClimb.setOnClickListener {
-            launchCyclingRecordScreen("Biggest Climb","Height")
+            launchCyclingRecordScreen("Biggest Climb", "Height")
         }
         binding.containerBestAverageSpeed.setOnClickListener {
-            launchCyclingRecordScreen("Best Average Speed","Average Speed")
+            launchCyclingRecordScreen("Best Average Speed", "Average Speed")
         }
     }
 
-    private fun launchCyclingRecordScreen(record: String, recordFieldHint:String) {
+    private fun launchCyclingRecordScreen(record: String, recordFieldHint: String) {
         val intent = Intent(context, EditRecordActivity::class.java)
-        intent.putExtra("screen_data", EditRecordActivity.ScreenData(record,"cycling_records",recordFieldHint))
+        intent.putExtra(
+            "screen_data",
+            EditRecordActivity.ScreenData(record, FILENAME, recordFieldHint)
+        )
         startActivity(intent)
 
+    }
+
+    companion object {
+        const val FILENAME="cycling_records"
     }
 }

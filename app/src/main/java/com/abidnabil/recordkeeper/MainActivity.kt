@@ -15,6 +15,7 @@ import com.abidnabil.recordkeeper.running.RunningFragment
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.Snackbar
 
+
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +41,17 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 true
 
             }
+
             R.id.reset_running -> {
                 showConfirmationDiaLog("running", false)
                 true
             }
+
             R.id.reset_all -> {
                 showConfirmationDiaLog("", true)
                 true
             }
+
             else -> {
                 super.onOptionsItemSelected(item)
             }
@@ -65,11 +69,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 "Yes"
             ) { _, _ ->
                 if (isAll) {
-                    getSharedPreferences("cycling_records", Context.MODE_PRIVATE).edit {
+                    getSharedPreferences(CyclingFragment.FILENAME, Context.MODE_PRIVATE).edit {
                         clear()
 
                     }
-                    getSharedPreferences("running_records", Context.MODE_PRIVATE).edit {
+                    getSharedPreferences(RunningFragment.FILENAME, Context.MODE_PRIVATE).edit {
                         clear()
                     }
                 } else {

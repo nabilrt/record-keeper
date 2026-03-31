@@ -41,7 +41,7 @@ class RunningFragment : Fragment() {
 
     private fun displayRecords() {
         val runningPreferences =
-            requireContext().getSharedPreferences("running_records", Context.MODE_PRIVATE)
+            requireContext().getSharedPreferences(FILENAME, Context.MODE_PRIVATE)
         binding.textView5kmValue.text = runningPreferences.getString("5km record", null)
         binding.textView5kmDate.text = runningPreferences.getString("5km date", null)
         binding.textView10kmValue.text = runningPreferences.getString("10km record", null)
@@ -75,9 +75,13 @@ class RunningFragment : Fragment() {
 
     private fun launchRunningRecordScreen(title: String) {
         val intent = Intent(context, EditRecordActivity::class.java)
-        val screenData = EditRecordActivity.ScreenData(title, "running_records", "Time")
+        val screenData = EditRecordActivity.ScreenData(title, FILENAME, "Time")
         intent.putExtra("screen_data", screenData)
         startActivity(intent)
+    }
+
+    companion object {
+        const val FILENAME="running_records"
     }
 
 }
